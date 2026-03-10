@@ -8,9 +8,10 @@ import { DataService } from '../../services/data.service';
 })
 export class UserComponent implements OnInit {
   name: string;
+  email: string;
   address: Address;
   hobbies: string[];
-  posts: Posts;
+  posts: Posts[];
 
   constructor(private dataService: DataService) {
     console.log('Data service connected...');
