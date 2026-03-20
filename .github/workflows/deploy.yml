@@ -21,9 +21,9 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build Project
-        # This fix is mandatory to bypass OpenSSL 3.0 restrictions in Node 20
+        # Correct PowerShell syntax for Windows runners
         run: |
-           $env:NODE_OPTIONS = "--openssl-legacy-provider"
+          $env:NODE_OPTIONS = "--openssl-legacy-provider"
           npm run build --prod
 
       - name: Upload artifact for deployment job
