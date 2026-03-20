@@ -3,7 +3,7 @@ name: Build and Deploy Angular App
 on:
   push:
     branches:
-      - master  # Ensure this matches your branch name (master or main)
+      - master
 
 jobs:
   build:
@@ -11,22 +11,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 14
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '14' # Use Node 14 to avoid OpenSSL and Module errors
 
       - name: Install dependencies
-        # Critical for Angular 5 dependencies on Node 20
+        # Node 14 is much more stable for Angular 5
         run: npm install --legacy-peer-deps
 
       - name: Build Project
-        # Correct PowerShell syntax for Windows runners
-        run: |
-          $env:NODE_OPTIONS = "--openssl-legacy-provider"
-          npm run build --prod
+        # No OpenSSL fix needed for Node 14
+        run: npm run build -- --prod
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: node-app
@@ -36,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: node-app
