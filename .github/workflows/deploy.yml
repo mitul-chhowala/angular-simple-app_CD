@@ -11,18 +11,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js 14
+      - name: Set up Node.js 10
         uses: actions/setup-node@v4
         with:
-          node-version: '14' # Use Node 14 to avoid OpenSSL and Module errors
+          node-version: '10' # Node 10 is the most stable version for Angular 5
 
-      - name: Install dependencies
-        # Node 14 is much more stable for Angular 5
-        run: npm install --legacy-peer-deps
+      - name: Clean and Install Dependencies
+        run: |
+          npm install --legacy-peer-deps
+          # This line fixes the 'Module Not Found' error explicitly
+          npm install @angular-devkit/core@0.0.28 --save-dev
 
       - name: Build Project
-        # No OpenSSL fix needed for Node 14
-        run: npm run build -- --prod
+        run: |
+          # Node 10 uses older security, so no OpenSSL fix is needed
+          npm run build -- --prod
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
